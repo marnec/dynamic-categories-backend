@@ -24,30 +24,27 @@ async function bootstrap() {
 
   app.enableCors({ origin: process.env.BACKEND_ORIGIN, methods: 'GET,PUT,POST,PATCH,DELETE' });
 
-  const devEnv = process.env.DEV_ENV === 'true';
-  if (devEnv) {
-    // Swagger doc options
-    const options = new DocumentBuilder()
-      .setTitle('')
-      .setDescription('API')
-      .setVersion('0.1')
-      .addBearerAuth()
-      .build();
+  // Swagger doc options
+  const options = new DocumentBuilder()
+    .setTitle('')
+    .setDescription('API')
+    .setVersion('0.1')
+    .addBearerAuth()
+    .build();
 
-    // Swagger creation
-    const document = SwaggerModule.createDocument(app, options);
+  // Swagger creation
+  const document = SwaggerModule.createDocument(app, options);
 
-    SwaggerModule.setup('doc', app, document, { swaggerOptions: { defaultModelsExpandDepth: -1 } });
-  }
+  SwaggerModule.setup('doc', app, document, { swaggerOptions: { defaultModelsExpandDepth: -1 } });
 
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
       transformOptions: { enableImplicitConversion: true },
       exceptionFactory: (validationErrors: ValidationError[] = []) => {
-        logger.error(validationErrors)
+        logger.error(validationErrors);
         return new BadRequestException(validationErrors);
-      },
+      }
     })
   );
 
