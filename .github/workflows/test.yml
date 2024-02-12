@@ -1,0 +1,47 @@
+# name: Test and coverage
+
+# env:
+#   SONAR_PROJECT_KEY: recipes-book-backend
+#   SONAR_PROJECT_NAME: recipes-book-backend
+
+# on:
+#   push:
+#     branches:
+#       - main
+#       - develop
+
+# jobs:
+#   test:
+#     name: Test and coverage
+#     runs-on: self-hosted
+#     steps:
+#       - 
+#         name: Set SONAR_URL
+#         run: echo "SONAR_URL=$(echo $SONAR_URL)" >> $GITHUB_ENV
+#       - 
+#         name: Set SONAR_TOKEN
+#         run: echo "SONAR_TOKEN=$(echo $SONAR_TOKEN)" >> $GITHUB_ENV
+#       - 
+#         name: Checkout
+#         uses: actions/checkout@v3
+#         with:
+#           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis 
+#       - 
+#         name: Get branch name
+#         id: branch-name
+#         uses: tj-actions/branch-names@v5.2
+#       - 
+#         name: Setup sonarqube
+#         uses: warchant/setup-sonar-scanner@v3
+#       - 
+#         name: Setup node
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: 14
+#       - 
+#         name: Publish to Sonar
+#         run: sonar-scanner 
+#           -Dsonar.host.url=${{ env.SONAR_URL }} 
+#           -Dsonar.login=${{ env.SONAR_TOKEN }} 
+#           -Dsonar.projectKey=${{ env.SONAR_PROJECT_KEY }}-${{ steps.branch-name.outputs.current_branch }} 
+#           -Dsonar.projectName=${{ env.SONAR_PROJECT_NAME }}-${{ steps.branch-name.outputs.current_branch }}

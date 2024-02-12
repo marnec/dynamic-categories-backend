@@ -1,0 +1,38 @@
+name: Build and Publish
+
+env:
+  AWS_ACCOUNT_ID: 267392633781
+  AWS_REGION: eu-central-1
+  ECR_REPOSITORY: nem/attendance-tracker/backend
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build-and-publish:
+    runs-on: self-hosted
+    steps:
+      - name: Set AWS_ACCESS_KEY_ID
+        run: echo "AWS_ACCESS_KEY_ID=$(echo $AWS_ACCESS_KEY_ID)" >> $GITHUB_ENV
+      - name: Set AWS_SECRET_ACCESS_KEY
+        run: echo "AWS_SECRET_ACCESS_KEY=$(echo $AWS_SECRET_ACCESS_KEY)" >> $GITHUB_ENV
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v5.2
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      - name: Build and push docker image to AWS ECR
+        uses: kciter/aws-ecr-action@v4
+        with:
+          access_key_id: ${{ env.AWS_ACCESS_KEY_ID }}
+          secret_access_key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+          account_id: ${{ env.AWS_ACCOUNT_ID }}
+          repo: ${{ env.ECR_REPOSITORY }}/${{ steps.branch-name.outputs.current_branch }}
+          region: ${{ env.AWS_REGION }}
+          tags: latest,${{ github.sha }}
+          create_repo: true
+          dockerfile: ./docker/dockerfile.production
+          path: .

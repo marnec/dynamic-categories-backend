@@ -1,0 +1,10 @@
+.vscode/
+node_modules/
+.git/
+.vscode/
+dist/
+Makefile
+.gitignore
+.gitlab-ci.yml
+.editorconfig
+README.md

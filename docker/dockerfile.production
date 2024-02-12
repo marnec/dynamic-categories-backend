@@ -1,0 +1,23 @@
+# pinned this version because build crash on github-runner@infra
+# https://github.com/nodejs/node/issues/48444
+FROM node:18.17-alpine AS builder 
+
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm install -g npm@latest
+
+COPY ./ .
+
+RUN npm install
+RUN npm run build
+
+FROM node:18.17-alpine
+WORKDIR /app
+COPY --from=builder /app ./
+
+# set up and run entrypoint
+COPY ./docker/docker-entrypoint.production.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT /docker-entrypoint.sh

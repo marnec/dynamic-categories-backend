@@ -1,0 +1,19 @@
+# pinned this version because build crash on github-runner@infra
+# https://github.com/nodejs/node/issues/48444
+FROM node:18.17-alpine
+
+WORKDIR /app/
+
+# set up npm
+COPY package*.json ./
+RUN npm install -g npm@latest
+
+RUN npm install -g @nestjs/cli
+
+# expose 3000
+EXPOSE 3000
+
+# set up and run entrypoint
+COPY ./docker/docker-entrypoint.local.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+ENTRYPOINT /docker-entrypoint.sh
