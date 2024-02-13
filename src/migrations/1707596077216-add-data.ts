@@ -24,6 +24,12 @@ export class AddData1707596077216 implements MigrationInterface {
         }
       },
       {
+        name: 'gpus',
+        generate: {
+          itemName: () => `gpu-${faker.commerce.productName()}`
+        }
+      },
+      {
         name: 'miniatures',
         generate: {
           itemName: () => `miniature-${faker.person.fullName()}`
@@ -77,7 +83,7 @@ export class AddData1707596077216 implements MigrationInterface {
         category: { name: 'cpus' },
         type: 'freeChoice',
         metadata: { type: 'freeChoice' },
-        hint: { type: 'number', min: 0, max: 64, step: 2 }
+        hint: { type: 'number', min: 2, max: 64, step: 2 }
       },
       {
         name: 'brand',
@@ -87,6 +93,32 @@ export class AddData1707596077216 implements MigrationInterface {
           type: 'constrainedChoice',
           choices: ['Intel', 'AMD']
         }
+      },
+      {
+        name: 'clock',
+        type: 'number',
+        category: { name: 'gpus' },
+        metadata: { type: 'number', suffix: 'Mhz' },
+        hint: { type: 'number', min: 1000, max: 2300 }
+      },
+      {
+        name: 'process size',
+        type: 'freeChoice',
+        category: { name: 'gpus' },
+        metadata: { type: 'freeChoice' },
+        hint: { type: 'string', choices: ['5', '7', '9', '11'] }
+      },
+      {
+        name: 'memory',
+        type: 'constrainedChoice',
+        category: { name: 'gpus' },
+        metadata: { type: 'constrainedChoice', choices: ['4', '8', '10', '12', '24', '32'] }
+      },
+      {
+        name: 'directx12',
+        type: 'boolean',
+        category: { name: 'gpus' },
+        metadata: { type: 'boolean' }
       },
       {
         name: 'material',
